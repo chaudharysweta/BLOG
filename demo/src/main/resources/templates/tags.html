@@ -39,7 +39,7 @@
 <div class="container">
 
     <a th:href="@{/admin/tags/add}" style="margin: 20px 0" class="btn btn-primary">Add Tag</a>
-    <table class="table">
+    <table class="table" id="tblTag">
         <thead class="thead-light">
         <tr>
             <th scope="col">SN</th>
@@ -50,22 +50,65 @@
         </thead>
         <tbody>
 
-        <tr th:each="tag, iStat : ${tags}">
-            <th scope="row" th:text="${iStat.index + 1}">1</th>
-            <td th:text="${tag.name}">Larry</td>
+<!--        <tr th:each="tag, iStat : ${tags}">-->
+<!--            <th scope="row" th:text="${iStat.index + 1}">1</th>-->
+<!--            <td th:text="${tag.name}">Larry</td>-->
 
-            <td><a href="" th:href="@{/admin/tags/delete/{id}(id=${tag.id})}" class="btn btn-danger">Delete</a></td>
-            <td><a href="" th:href="@{/admin/tags/update/{id}(id=${tag.id})}" class="btn btn-warning">Update</a></td>
+<!--            <td><a href="" th:href="@{/admin/tags/delete/{id}(id=${tag.id})}" class="btn btn-danger">Delete</a></td>-->
+<!--            <td><a href="" th:href="@{/admin/tags/update/{id}(id=${tag.id})}" class="btn btn-warning">Update</a></td>-->
 
-        </tr>
+<!--        </tr>-->
         </tbody>
     </table>
 </div>
 
 
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script th:src="@{/js/jquery-3.7.1.min.js}" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<script>
+
+    $(() => {
+        ajaxGetTag();
+    });
+
+    function ajaxGetTag() {
+    $.ajax({
+      type: "POST",
+      url: "/admin/find-all-tags",
+      success: function(result) {
+        let success = result.success;
+        let rows = "";
+
+        if (success) {
+          $.each(result.body, function(i, tag) {
+            rows += "<tr>" +
+              "<td scope='row'>" + (i + 1) + "</td>" +
+              "<td>" + tag.name + "</td>" +
+              "<td><a href='/admin/tags/delete/" + tag.id + "' class='btn btn-danger'>Delete</a></td>" +
+              "<td><a href='/admin/tags/update/" + tag.id + "' class='btn btn-warning'>Update</a></td>" +
+              "</tr>";
+          });
+        }
+
+        console.log(rows);
+        $('#tblTag tbody').html(rows);
+
+        if (result.message) {
+          alert(result.message);
+        }
+      }
+    });
+  }
+
+</script>
+
+
 </body>
 </html>

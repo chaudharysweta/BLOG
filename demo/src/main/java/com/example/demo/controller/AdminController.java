@@ -60,6 +60,23 @@ public class AdminController {
         return "categoriesAdd";
     }
 
+    @PostMapping("/admin/find-all-categories")
+    public ResponseEntity<Response> getAllCategories(){
+        var success = false;
+        String message = null;
+        List<Category> categories = null;
+        try {
+            categories = categoryService.getAllCategory();
+            if (categories != null && !categories.isEmpty()){
+                success=true;
+            }
+        }catch (Exception e){
+            message = "Category not found";
+        }
+        return new ResponseEntity<>(new Response(categories,message,success),HttpStatus.OK);
+
+    }
+
     @PostMapping("/admin/categories/add")
     public String postCatAdd(@ModelAttribute("category") Category category) {
         categoryService.addCategory(category);
@@ -220,6 +237,22 @@ public class AdminController {
         return "tags";
     }
 
+    @PostMapping("/admin/find-all-tags")
+    public ResponseEntity<Response> getAllTags(){
+        var success = false;
+        String message = null;
+        List<Tag> tags = null;
+        try {
+            tags = tagService.getAllTag();
+            if (tags != null && !tags.isEmpty()){
+                success=true;
+            }
+        }catch (Exception e){
+            message = "Tags not found";
+        }
+        return new ResponseEntity<>(new Response(tags,message,success),HttpStatus.OK);
+
+    }
     @GetMapping("/admin/tags/add")
     public String tagAddGet(Model model) {
         model.addAttribute("tag", new Tag());
