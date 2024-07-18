@@ -8,7 +8,8 @@ import lombok.Data;
 public class Tag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "tag_gen",sequenceName = "tag_seq",allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="tag_gen" )
     @Column(name = "tag_id")
     private Integer id;
 

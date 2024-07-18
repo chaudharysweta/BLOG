@@ -11,7 +11,8 @@ import java.util.Set;
 public class Blog {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "blog_gen" ,sequenceName = "blog_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blog_gen")
     private Long id;
 
     private String name;
